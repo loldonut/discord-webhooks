@@ -1,0 +1,32 @@
+{
+  "name": "discord-webhooks",
+  "version": "0.0.1",
+  "description": "'discord-webhooks' manages Discord's Webhooks.",
+  "main": "./src/index.js",
+  "typings": "./typings/index.d.ts",
+  "files": [
+      "src",
+      "typings"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loldonut/discord-webhooks.git"
+  },
+  "keywords": [
+    "discord",
+    "webhooks",
+    "api"
+  ],
+  "author": "loldonut",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/loldonut/discord-webhooks/issues"
+  },
+  "homepage": "https://github.com/loldonut/discord-webhooks#readme",
+  "dependencies": {
+    "undici": "^5.8.0"
+  }
+}
