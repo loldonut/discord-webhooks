@@ -42,7 +42,7 @@ class Webhook {
             throw new Error('No `content` or `embeds` value found!');
         }
 
-        const res = await request(this.url, {
+        const res = await request(`https://discord.com/api/v10/webhooks/${this.options.id}/${this.options.token}`, {
             headers: this.headers,
             body: pack(options),
             method: 'POST'
