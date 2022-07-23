@@ -38,7 +38,7 @@ class Webhook {
      * @returns {Promise<Response>}
      */
     async send(options = {}) {
-        if (!'content' in options || 'embeds' in options) {
+        if (!'content' in options || !'embeds' in options) {
             throw new Error('No `content` or `embeds` value found!');
         }
 
