@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { Response } from 'undici';
+import { ResponseData } from 'undici/types/dispatcher';
 
 export type If<T extends boolean, A, B = null> = T extends true ? A : T extends false ? B : A | B;
 
@@ -47,7 +47,7 @@ export class Webhook<Ready extends boolean = boolean> extends EventEmitter {
         listener: (...args: any[]) => void | Promise<void>,
     ): this;
 
-    public send(options: WebhookMessageOptions): Promise<Response>;
+    public send(options: WebhookMessageOptions): Promise<ResponseData>;
     private fetchWebhook(url: string): Promise<void>;
 }
 

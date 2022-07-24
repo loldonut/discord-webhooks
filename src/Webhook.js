@@ -1,5 +1,6 @@
 const { EventEmitter } = require('node:events');
 const { request } = require('undici');
+const DiscordAPIError = require('./DiscordAPIError');
 
 const WebhookMessagePayload = require('./WebhookMessagePayload');
 
@@ -71,7 +72,7 @@ class Webhook extends EventEmitter {
      * Sends a message through the Webhook.
      *
      * @param {WebhookMessageOptions} options
-     * @returns {Promise<Response>}
+     * @returns {Promise<ResponseData>}
      */
     async send(options = {}) {
         if (options instanceof WebhookMessagePayload) {
@@ -87,6 +88,11 @@ class Webhook extends EventEmitter {
             body: pack(options),
             method: 'POST'
         });
+
+        if (res.statusCode > 299) {
+            const error = await res.body.json();
+            throw new DiscordAPIError(error);
+        }
 
         return res;
     }
