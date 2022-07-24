@@ -1,8 +1,9 @@
+const { EventEmitter } = require('node:events');
 const { request } = require('undici');
 
 const pack = (d) => JSON.stringify(d);
 
-class Webhook {
+class Webhook extends EventEmitter {
     /**
      * @typedef {Object} WebhookOptions
      *
@@ -16,10 +17,17 @@ class Webhook {
      * @param {WebhookOptions|string} options - The URL of the Webhook
      */
     constructor(options) {
-        this.options = {};
+        super();
 
-        if (typeof options === 'string') this.fetchWebhook(options);
-        if (typeof options === 'object') this.options = options;
+        /**
+         * Options to be used for requests.
+         * @type {WebhookOptions}
+         * @private
+         */
+        this.options = {};
+        this.isReady = false;
+
+        this.fetchWebhook(options);
 
         this.headers = {
             'Content-Type': 'application/json'
@@ -60,14 +68,57 @@ class Webhook {
      * @private
      */
     async fetchWebhook(url) {
+        url = typeof url === 'object'
+            ? `https://discord.com/api/v10/webhooks/${this.options.id}/${this.options.token}`
+            : url;
+
         const res = await request(url, {
             headers: this.headers,
             method: 'GET'
         });
-        const resJSON = await res.body.json();
+        const data = await res.body.json();
 
-        this.options['id'] = resJSON.id;
-        this.options['token'] = resJSON.token;
+        this.options.id ??= data.id;
+        this.options.token ??= data.token;
+
+        /**
+         * Name of the Webhook
+         * @type {string}
+         */
+        this.name = data.name;
+        
+        /**
+         * ID of the Webhook
+         * @type {string}
+         */
+        this.id = data.id
+
+        /**
+         * The default user hash of the webhook
+         * @type {string}
+         */
+        this.avatar = data.avatar;
+
+        /**
+         * The type of the webhook
+         * @type {number}
+         */
+        this.type = data.type;
+
+        /**
+         * the ID of the Guild the webhook is on
+         * @type {string}
+         */
+        this.guildId = data.guild_id ?? null;
+
+        /**
+         * the ID of the Guild the webhook is on
+         * @type {string}
+         */
+        this.channelId = data.channel_id ?? null;
+
+        this.emit('ready', this);
+        this.isReady = true;
     }
 }
 
