@@ -8,16 +8,18 @@ class Webhook {
      *
      * @property {string} id - the ID of the webhook
      * @property {string} token - the token of the webhook
-     *
      */
 
     /**
      * Represents a webhook
      *
-     * @param {WebhookOptions} options - The URL of the Webhook
+     * @param {WebhookOptions|string} options - The URL of the Webhook
      */
-    constructor(options = {}) {
-        this.options = options;
+    constructor(options) {
+        this.options = {};
+
+        if (typeof options === 'string') this.fetchWebhook(options);
+        if (typeof options === 'object') this.options = options;
 
         this.headers = {
             'Content-Type': 'application/json'
@@ -49,6 +51,23 @@ class Webhook {
         });
 
         return res;
+    }
+
+    /**
+     * Fetches the Webhook URL
+     *
+     * @param {string} url
+     * @private
+     */
+    async fetchWebhook(url) {
+        const res = await request(url, {
+            headers: this.headers,
+            method: 'GET'
+        });
+        const resJSON = await res.body.json();
+
+        this.options['id'] = resJSON.id;
+        this.options['token'] = resJSON.token;
     }
 }
 

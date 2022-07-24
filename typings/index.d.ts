@@ -1,13 +1,14 @@
 import { Response } from 'undici';
 
 export class Webhook {
-    public constructor(options: WebhookOptions);
+    public constructor(options: WebhookOptions | string);
     public options: WebhookOptions;
     public headers: {
         'Content-Type': 'application/json'
     };
 
-    public send(options: WebhookMessageOptions): Promise<Response>
+    public send(options: WebhookMessageOptions): Promise<Response>;
+    private fetchWebhook(url: string): Promise<void>;
 }
 
 export interface WebhookOptions {
