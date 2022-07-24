@@ -100,4 +100,5 @@ export interface WebhookMessageOptions {
     attachments?: Array<AttachmentOptions>;
     flags?: number;
     threadName?: string;
+    threadId?: string;
 }

@@ -66,6 +66,7 @@ class Webhook extends EventEmitter {
      * @property {?Array<AttachmentOptions>} attachments
      * @property {?number} flags
      * @property {?string} threadName
+     * @property {?string} threadId
      */
 
     /**
@@ -83,10 +84,15 @@ class Webhook extends EventEmitter {
                 .resolveOptions();
         }
 
+        const query = new URLSearchParams();
+        query.append('wait', 'true');
+        query.append('thread_id', options.threadId);
+
         const res = await request(`https://discord.com/api/v10/webhooks/${this.options.id}/${this.options.token}`, {
             headers: this.headers,
             body: pack(options),
-            method: 'POST'
+            method: 'POST',
+            query,
         });
 
         if (res.statusCode > 299) {
