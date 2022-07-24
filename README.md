@@ -18,4 +18,7 @@ webhook.send({
     .catch(console.error);
 ```
 
+You can pass the URL in a string instead of an Object,
+However, you might need to execute `Webhook` functions with `await`
+
 **Note:** `discord-webhooks` is owned by someone, and so i can't really publish this to NPM right now.
