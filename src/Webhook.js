@@ -1,6 +1,8 @@
 const { EventEmitter } = require('node:events');
 const { request } = require('undici');
 
+const WebhookMessagePayload = require('./WebhookMessagePayload');
+
 const pack = (d) => JSON.stringify(d);
 
 class Webhook extends EventEmitter {
@@ -35,10 +37,34 @@ class Webhook extends EventEmitter {
     }
 
     /**
+     * @typedef {Object} AttachmentOptions
+     * 
+     * @property {string} id
+     * @property {string} filename
+     * @property {?string} description
+     * @property {?string} content_type
+     * @property {?number} size
+     * @property {?string} url
+     * @property {?string} proxy_url
+     * @property {?number} height
+     * @property {?number} width
+     * @property {?boolean} ephemeral
+     */
+
+    /**
      * @typdef {Object} WebhookMessageOptions
      *
-     * @property {string} content
-     * @property {Array<object>} embeds
+     * @property {?string} content
+     * @property {?string} username
+     * @property {?string} avatarURL
+     * @property {?boolean} tts
+     * @property {?Array<Object>} embeds
+     * @property {?AllowedMentionsOptions} allowedMentions
+     * @property {?Array<Object>} components
+     * @property {?string} payloadJSON
+     * @property {?Array<AttachmentOptions>} attachments
+     * @property {?number} flags
+     * @property {?string} threadName
      */
 
     /**
@@ -48,8 +74,12 @@ class Webhook extends EventEmitter {
      * @returns {Promise<Response>}
      */
     async send(options = {}) {
-        if (!'content' in options || !'embeds' in options) {
-            throw new Error('No `content` or `embeds` value found!');
+        if (options instanceof WebhookMessagePayload) {
+            options = options.resolveOptions();
+        }
+        else {
+            options = new WebhookMessagePayload(options)
+                .resolveOptions();
         }
 
         const res = await request(`https://discord.com/api/v10/webhooks/${this.options.id}/${this.options.token}`, {
