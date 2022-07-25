@@ -86,7 +86,10 @@ class Webhook extends EventEmitter {
 
         const query = new URLSearchParams();
         query.append('wait', 'true');
-        query.append('thread_id', options.threadId);
+
+        if (options.threadId) {
+            query.append('thread_id', options.threadId);
+        }
 
         const res = await request(`https://discord.com/api/v10/webhooks/${this.options.id}/${this.options.token}`, {
             headers: this.headers,
