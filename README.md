@@ -26,5 +26,3 @@ Note that you must use `Websocket#send()` inside the `ready` event
 so the function will have your webhook's ID and Token.
 
 [See what you can send using the webhook here...](https://discord.com/developers/docs/resources/webhook#execute-webhook-jsonform-params)
-
-**Note:** `discord-webhooks` is owned by someone, and so i can't really publish this to NPM right now.
