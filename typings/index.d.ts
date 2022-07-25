@@ -57,7 +57,6 @@ export class WebhookMessagePayload {
 
     public resolveOptions(): Object;
     public resolveAllowedMentions(allowedMentions: AllowedMentionsOptions): Object;
-    public static create(options: WebhookMessageOptions): WebhookMessagePayload;
 }
 
 export interface AllowedMentionOptions {
