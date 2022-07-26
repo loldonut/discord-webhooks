@@ -2,6 +2,12 @@
 
 `discord-webhooks` **manages Discord's Webhooks**
 
+## Installation
+
+```sh-session
+npm install loldonut/discord-webhooks
+```
+
 ## Example
 
 ```js
